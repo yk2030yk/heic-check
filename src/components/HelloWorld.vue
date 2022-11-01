@@ -1,40 +1,51 @@
 <template>
   <div class="hello">
     <h1>{{ msg }}</h1>
-    <p>
-      For a guide and recipes on how to configure / customize this project,<br>
-      check out the
-      <a href="https://cli.vuejs.org" target="_blank" rel="noopener">vue-cli documentation</a>.
-    </p>
-    <h3>Installed CLI Plugins</h3>
-    <ul>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-babel" target="_blank" rel="noopener">babel</a></li>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-eslint" target="_blank" rel="noopener">eslint</a></li>
-    </ul>
-    <h3>Essential Links</h3>
-    <ul>
-      <li><a href="https://vuejs.org" target="_blank" rel="noopener">Core Docs</a></li>
-      <li><a href="https://forum.vuejs.org" target="_blank" rel="noopener">Forum</a></li>
-      <li><a href="https://chat.vuejs.org" target="_blank" rel="noopener">Community Chat</a></li>
-      <li><a href="https://twitter.com/vuejs" target="_blank" rel="noopener">Twitter</a></li>
-      <li><a href="https://news.vuejs.org" target="_blank" rel="noopener">News</a></li>
-    </ul>
-    <h3>Ecosystem</h3>
-    <ul>
-      <li><a href="https://router.vuejs.org" target="_blank" rel="noopener">vue-router</a></li>
-      <li><a href="https://vuex.vuejs.org" target="_blank" rel="noopener">vuex</a></li>
-      <li><a href="https://github.com/vuejs/vue-devtools#vue-devtools" target="_blank" rel="noopener">vue-devtools</a></li>
-      <li><a href="https://vue-loader.vuejs.org" target="_blank" rel="noopener">vue-loader</a></li>
-      <li><a href="https://github.com/vuejs/awesome-vue" target="_blank" rel="noopener">awesome-vue</a></li>
-    </ul>
+    <input type="file" @change="changeFile">
+    <template v-if="file">
+      <div>
+        <h2>選択結果</h2>
+        <div class="info">
+          <div>size: {{ file.size }}</div>
+          <div>name: {{ file.name }}</div>
+          <div>mime: {{ file.mime }}</div>
+        </div>
+      </div>
+    </template>
   </div>
 </template>
 
 <script>
 export default {
   name: 'HelloWorld',
+  data: () => {
+    return {
+      file: undefined
+    }
+  },
   props: {
     msg: String
+  },
+  methods: {
+    changeFile(e) {
+      this.file = undefined
+
+      const reader = new FileReader()
+      const file = e.target.files[0]
+
+      reader.readAsDataURL(file)
+      reader.onload = () => {
+        console.log(reader.result)
+
+        const m = reader.result.match(/data:(.+);base64,/)
+
+        this.file = {
+          size: file.size,
+          name: file.name,
+          mime: m && m[1]
+        }
+      }
+    }
   }
 }
 </script>
@@ -54,5 +65,17 @@ li {
 }
 a {
   color: #42b983;
+}
+.info {
+  display: flex;
+  flex-direction: column;
+  width: 500px;
+  margin-left: auto;
+  margin-right: auto;
+  align-items: flex-start;
+  background-color: #ddd;
+  padding: 10px;
+  gap: 10px;
+  margin-top: 10px;
 }
 </style>
