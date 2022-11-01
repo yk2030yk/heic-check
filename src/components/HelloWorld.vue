@@ -1,17 +1,36 @@
 <template>
   <div class="hello">
-    <h1>{{ msg }}</h1>
-    <input type="file" @change="changeFile">
-    <template v-if="file">
-      <div>
-        <h2>選択結果</h2>
-        <div class="info">
-          <div>size: {{ file.size }}</div>
-          <div>name: {{ file.name }}</div>
-          <div>mime: {{ file.mime }}</div>
+    <h1>HEIC動作確認用</h1>
+
+    <div class="box">
+      <h2>通常inputタグ</h2>
+      <input type="file" @change="changeFile">
+      <template v-if="file">
+        <div>
+          <h3>選択結果</h3>
+          <div class="result">
+            <div>size: {{ file.size }}</div>
+            <div>name: {{ file.name }}</div>
+            <div>mime: {{ file.mime }}</div>
+          </div>
         </div>
-      </div>
-    </template>
+      </template>
+    </div>
+
+    <div class="box">
+      <h2>Vuetify v-file-input</h2>
+      <v-file-input @change="changeVFile" />
+      <template v-if="vfile">
+        <div>
+          <h3>選択結果</h3>
+          <div class="result">
+            <div>size: {{ vfile.size }}</div>
+            <div>name: {{ vfile.name }}</div>
+            <div>mime: {{ vfile.mime }}</div>
+          </div>
+        </div>
+      </template>
+    </div>
   </div>
 </template>
 
@@ -20,7 +39,8 @@ export default {
   name: 'HelloWorld',
   data: () => {
     return {
-      file: undefined
+      file: undefined,
+      vfile: undefined
     }
   },
   props: {
@@ -45,6 +65,24 @@ export default {
           mime: m && m[1]
         }
       }
+    },
+
+    changeVFile(file) {
+      this.vfile = undefined
+
+      const reader = new FileReader()
+      reader.readAsDataURL(file)
+      reader.onload = () => {
+        console.log(reader.result)
+
+        const m = reader.result.match(/data:(.+);base64,/)
+
+        this.vfile = {
+          size: file.size,
+          name: file.name,
+          mime: m && m[1]
+        }
+      }
     }
   }
 }
@@ -53,20 +91,12 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 h3 {
-  margin: 40px 0 0;
+  margin-top: 10px;
 }
-ul {
-  list-style-type: none;
-  padding: 0;
+.hello {
+  padding: 20px;
 }
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-a {
-  color: #42b983;
-}
-.info {
+.result {
   display: flex;
   flex-direction: column;
   width: 500px;
@@ -77,5 +107,8 @@ a {
   padding: 10px;
   gap: 10px;
   margin-top: 10px;
+}
+.box {
+  margin-top: 30px;
 }
 </style>
