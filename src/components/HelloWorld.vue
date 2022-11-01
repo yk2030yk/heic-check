@@ -2,6 +2,8 @@
   <div class="hello">
     <h1>HEIC動作確認用</h1>
 
+    <div class="border"></div>
+    
     <div class="box">
       <h2>通常inputタグ</h2>
       <input type="file" @change="changeFile">
@@ -17,6 +19,8 @@
       </template>
     </div>
 
+    <div class="border"></div>
+
     <div class="box">
       <h2>Vuetify v-file-input</h2>
       <v-file-input @change="changeVFile" />
@@ -31,6 +35,8 @@
         </div>
       </template>
     </div>
+
+    <div class="border"></div>
   </div>
 </template>
 
@@ -90,25 +96,36 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+h2 {
+  color: rgb(48, 48, 169);
+}
 h3 {
   margin-top: 10px;
 }
 .hello {
+  color: rgb(70, 70, 70);
   padding: 20px;
+}
+.border {
+  background-color: rgb(173, 173, 173);
+  height: 2px;
+  width: 100%;
+  margin: 30px 0
 }
 .result {
   display: flex;
   flex-direction: column;
-  width: 500px;
+  width: 100%;
   margin-left: auto;
   margin-right: auto;
   align-items: flex-start;
-  background-color: #ddd;
+  background-color: rgb(249, 249, 249);
+  border: solid 1px #ddd;
   padding: 10px;
   gap: 10px;
   margin-top: 10px;
 }
 .box {
-  margin-top: 30px;
+  
 }
 </style>
